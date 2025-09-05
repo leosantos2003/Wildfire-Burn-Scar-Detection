@@ -39,12 +39,17 @@
 
 ## How to use
 
-1.  **Train Model:** To begin training from scratch:
+1.  **Preprocess the Features:** This step calculates spectral and texture features to speed up training (this step may take a few minutes).
+    ```bash
+    python src/preprocess_features.py
+    ```
+
+2.  **Train Model:** To begin training from scratch:
     ```bash
     python src/train.py
     ```
 
-2.  **Evaluate Model:** To calculate the metrics (Accuracy, IoU, F1, AUC) in the validation set:
+3.  **Evaluate Model:** To calculate the metrics (Accuracy, IoU, F1, AUC) in the validation set:
     ```bash
     python src/evaluate.py
     ```
