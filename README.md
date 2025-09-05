@@ -4,13 +4,15 @@
 /
 |-- data/
 |   |-- dataset/
+|   |-- processed/
 |   `-- avaliacao/
 |-- src/
 |   |-- data_loader.py
 |   |-- models.py
 |   |-- loss.py
 |   |-- train.py
-|   `-- evaluate.py
+|   |-- evaluate.py
+|   `-- preprocess_features.py
 |   
 |-- notebooks/
 |-- .gitignore
