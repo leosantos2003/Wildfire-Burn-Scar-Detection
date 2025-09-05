@@ -4,10 +4,41 @@ import os
 import numpy as np
 import rasterio
 from tqdm import tqdm
-
-# Reutiliza nossas funções do DataLoader original
-from data_loader import normalize_percentile, get_glcm_features
 import spyndex
+from skimage.feature import graycomatrix, graycoprops
+
+# --- FUNÇÕES DE AJUDA MOVIDAS PARA CÁ ---
+def normalize_percentile(image, p_min=1, p_max=99):
+    """Normaliza a imagem usando clip de percentil para remover outliers."""
+    #
+    normalized_bands = []
+    for band in image:
+        band_no_nan = band[~np.isnan(band)]
+        if band_no_nan.size > 0:
+            lower_percentile, upper_percentile = np.percentile(band_no_nan, [p_min, p_max])
+            clipped_band = np.clip(band, lower_percentile, upper_percentile)
+            mean = clipped_band.mean()
+            std = clipped_band.std()
+            if std > 0:
+                normalized_band = (clipped_band - mean) / std
+            else:
+                normalized_band = clipped_band - mean
+            normalized_bands.append(normalized_band)
+        else:
+            normalized_bands.append(band)
+    return np.stack(normalized_bands)
+
+def get_glcm_features(image_band):
+    """Calcula features GLCM para uma única banda da imagem."""
+    #
+    band_uint8 = (image_band * 255).astype(np.uint8)
+    glcm = graycomatrix(band_uint8, distances=[1], angles=[0], symmetric=True, normed=True)
+    contrast = graycoprops(glcm, 'contrast')[0, 0]
+    homogeneity = graycoprops(glcm, 'homogeneity')[0, 0]
+    correlation = graycoprops(glcm, 'correlation')[0, 0]
+    return np.array([contrast, homogeneity, correlation], dtype=np.float32)
+# -----------------------------------------
+
 
 # --- Configuração de Pastas ---
 RAW_DATA_DIR = 'data/dataset'
@@ -16,7 +47,6 @@ PROCESSED_DATA_DIR = 'data/processed/dataset'
 def preprocess_and_save():
     print("Iniciando pré-processamento de features...")
     
-    # Itera sobre t1, t2 e mask
     for folder in ['t1', 't2', 'mask']:
         raw_folder_path = os.path.join(RAW_DATA_DIR, folder)
         processed_folder_path = os.path.join(PROCESSED_DATA_DIR, folder)
@@ -31,12 +61,10 @@ def preprocess_and_save():
             
             with rasterio.open(raw_file_path) as src:
                 if folder == 'mask':
-                    # Processamento simples para máscaras
                     mask = src.read(1).astype(np.float32)
                     mask = np.nan_to_num(mask, nan=0.0)
                     processed_data = np.where(mask > 0, 1.0, 0.0).astype(np.float32)
                 else:
-                    # Processamento completo para imagens t1 e t2
                     img_raw = src.read().astype(np.float32)
                     img_raw = np.nan_to_num(img_raw, nan=0.0)
 
@@ -46,7 +74,6 @@ def preprocess_and_save():
                     
                     nbr = spyndex.computeIndex(index="NBR", params=params_safe)
                     nbrswir = spyndex.computeIndex(index="NBRSWIR", params=params_safe)
-                    
                     glcm_features = get_glcm_features(img_raw[1])
 
                     all_features = np.vstack([
@@ -58,7 +85,6 @@ def preprocess_and_save():
 
                     processed_data = normalize_percentile(all_features)
 
-            # Salva o resultado como um arquivo .npy (eficiente para numpy/pytorch)
             save_path = os.path.join(processed_folder_path, filename.replace('.tif', '.npy'))
             np.save(save_path, processed_data)
 
