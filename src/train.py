@@ -11,7 +11,7 @@ from models import AttentionUNetSiamese
 from loss import CompositeLoss
 
 # --- Configurações ---
-DATA_ROOT = 'data/dataset/'
+DATA_ROOT = 'data/processed/dataset/' # Pré-processamento adicionado
 T1_DIR = os.path.join(DATA_ROOT, 't1')
 T2_DIR = os.path.join(DATA_ROOT, 't2')
 MASK_DIR = os.path.join(DATA_ROOT, 'mask')
