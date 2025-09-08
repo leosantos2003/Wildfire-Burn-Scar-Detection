@@ -8,13 +8,13 @@ The mission, as proposed by the event, is to develop a computational solution to
 
 ## Development Phases
 
-1. **Phase 1**: The project began with setting up a robust development environment and creating an initial DataLoader to load and visualize the raw data, ensuring a solid and reproducible foundation.
+* **Phase 1**: The project began with setting up a robust development environment and creating an initial DataLoader to load and visualize the raw data, ensuring a solid and reproducible foundation.
 
-2. **Phase 2**: To enrich the information available to the model, a crucial feature engineering step was implemented. The goal was to inject remote sensing "domain knowledge" directly into the data, calculating spectral and textural indices known to be effective in detecting fires.
+* **Phase 2**: To enrich the information available to the model, a crucial feature engineering step was implemented. The goal was to inject remote sensing "domain knowledge" directly into the data, calculating spectral and textural indices known to be effective in detecting fires.
 
-3. **Phase 3**: The core architecture was developed, a Siamese Attention U-Net, and the training loop. This phase focused on building a model capable of learning the complex spatial and temporal relationships of the enriched data and training it efficiently.
+* **Phase 3**: The core architecture was developed, a Siamese Attention U-Net, and the training loop. This phase focused on building a model capable of learning the complex spatial and temporal relationships of the enriched data and training it efficiently.
 
-4. **Phase 4**: After the first training session, a speed bottleneck was identified. Calculating features "live" every epoch was slowing the process down. The solution was to create a preprocessing pipeline where all heavy calculations are performed once and saved to disk. This resulted in a drastic acceleration in training time, from several minutes to seconds per epoch.
+* **Phase 4**: After the first training session, a speed bottleneck was identified. Calculating features "live" every epoch was slowing the process down. The solution was to create a preprocessing pipeline where all heavy calculations are performed once and saved to disk. This resulted in a drastic acceleration in training time, from several minutes to seconds per epoch.
 
 ## Key-concepts and calculus explained
 
@@ -22,7 +22,14 @@ The mission, as proposed by the event, is to develop a computational solution to
 
 The choice of architecture was deliberate to solve the bi-temporal change detection problem.
 
-* Siamese Architecture: Consists of two identical encoders that process T1 (before) and T2 (after) images in parallel. Because the encoders share the same weights, they learn to map both images to the same "feature space," allowing for meaningful comparison between them.
+* **Siamese Architecture**: Consists of two identical encoders that process T1 (before) and T2 (after) images in parallel. Given that the encoders share the same weights, they learn to map both images to the same "feature space," allowing for meaningful comparison between them.
+
+* **U-Net Backbone**: U-Net is a classic architecture for image segmentation. Its encoder-decoder structure with skip connections allows the model to capture both the overall image context (in the deeper encoder layers) and the fine localization details (preserved by the skip connections), which is essential for generating prediction masks with accurate edges.
+
+* **Attention Mechanism (CBAM)**: To enhance U-Net, we integrated a Convolutional Block Attention Module (CBAM). Attention allows the model to learn to "pay more attention" to the most informative regions and features of the image. It does this in two steps:
+
+    * Channel Attention: Decide which channels (e.g., is the NIR band more important than the Red band?) are more relevant.
+    * Spatial Attention: Decide which areas of the image (e.g., the central region with texture changes) are most important. In this model, attention is applied to the absolute difference between the T1 and T2 features, forcing the model to focus precisely on the areas of change.
 
 ```
 /
