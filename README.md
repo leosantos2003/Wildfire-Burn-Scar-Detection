@@ -6,26 +6,23 @@ This repository contains the solution developed for the WorCap 2025 Hackathon, f
 
 The mission, as proposed by the event, is to develop a computational solution to map affected areas, contributing to prevention, mitigation, and environmental recovery efforts. Starting from a simple baseline, this project evolved into a robust and optimized pipeline, incorporating feature engineering, an advanced neural network architecture, and a workflow focused on performance and reproducibility.
 
-graph TD
-    A[1. Dados Brutos (.tif)] -- "Imagens T1, T2 e Máscaras" --> B(2. Pré-processamento);
-    subgraph 2. Pré-processamento [src/preprocess_features.py]
-        B1(Cálculo de Índices Espectrais)
-        B2(Cálculo de Features de Textura GLCM)
-        B3(Normalização por Percentil)
-    end
-    B -- "Salva Tensores de 9 Canais (.npy)" --> C[3. Dados Processados];
-    C -- "Lidos pelo DataLoader Otimizado" --> D(4. Treinamento do Modelo);
-    subgraph 4. Treinamento do Modelo [src/train.py]
-        D1[Modelo AttentionUNetSiamese]
-        D2[Loss Composta (Dice+Focal)]
-        D3[Otimizador AdamW]
-    end
-    D -- "Salva o Melhor Checkpoint (.pth)" --> E[5. Modelo Salvo];
-    E -- "Carregado para Avaliação" --> F(6. Avaliação e Análise);
-    subgraph 6. Avaliação e Análise [src/evaluate.py + Notebook]
-        F1(Cálculo de Métricas)
-        F2(Geração de Imagens de Previsão)
-    end
+## Development Phases
+
+1. **Phase 1**: The project began with setting up a robust development environment and creating an initial DataLoader to load and visualize the raw data, ensuring a solid and reproducible foundation.
+
+2. **Phase 2**: To enrich the information available to the model, a crucial feature engineering step was implemented. The goal was to inject remote sensing "domain knowledge" directly into the data, calculating spectral and textural indices known to be effective in detecting fires.
+
+3. **Phase 3**: The core architecture was developed, a Siamese Attention U-Net, and the training loop. This phase focused on building a model capable of learning the complex spatial and temporal relationships of the enriched data and training it efficiently.
+
+4. **Phase 4**: After the first training session, a speed bottleneck was identified. Calculating features "live" every epoch was slowing the process down. The solution was to create a preprocessing pipeline where all heavy calculations are performed once and saved to disk. This resulted in a drastic acceleration in training time, from several minutes to seconds per epoch.
+
+## Key-concepts and calculus explained
+
+1. **Model Architecture: Siamese Attention U-Net**
+
+The choice of architecture was deliberate to solve the bi-temporal change detection problem.
+
+* Siamese Architecture: Consists of two identical encoders that process T1 (before) and T2 (after) images in parallel. Because the encoders share the same weights, they learn to map both images to the same "feature space," allowing for meaningful comparison between them.
 
 ```
 /
