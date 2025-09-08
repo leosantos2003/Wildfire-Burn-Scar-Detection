@@ -19,7 +19,9 @@ The mission, as proposed by the event, is to develop a computational solution to
 ## Key-concepts and calculation explained
 
 <div align="center">
+   
    ### 1. **Model Architecture: Siamese Attention U-Net**
+
 </div>
 
 The choice of architecture was deliberate to solve the bi-temporal change detection problem.
