@@ -16,7 +16,7 @@ The mission, as proposed by the event, is to develop a computational solution to
 
 * **Phase 4**: After the first training session, a speed bottleneck was identified. Calculating features "live" every epoch was slowing the process down. The solution was to create a preprocessing pipeline where all heavy calculations are performed once and saved to disk. This resulted in a drastic acceleration in training time, from several minutes to seconds per epoch.
 
-## Key-concepts and calculus explained
+## Key-concepts and calculation explained
 
 1. **Model Architecture: Siamese Attention U-Net**
 
@@ -28,8 +28,35 @@ The choice of architecture was deliberate to solve the bi-temporal change detect
 
 * **Attention Mechanism (CBAM)**: To enhance U-Net, we integrated a Convolutional Block Attention Module (CBAM). Attention allows the model to learn to "pay more attention" to the most informative regions and features of the image. It does this in two steps:
 
-    * Channel Attention: Decide which channels (e.g., is the NIR band more important than the Red band?) are more relevant.
-    * Spatial Attention: Decide which areas of the image (e.g., the central region with texture changes) are most important. In this model, attention is applied to the absolute difference between the T1 and T2 features, forcing the model to focus precisely on the areas of change.
+    * **Channel Attention**: Decide which channels (e.g., is the NIR band more important than the Red band?) are more relevant.
+    * **Spatial Attention**: Decide which areas of the image (e.g., the central region with texture changes) are most important. In this model, attention is applied to the absolute difference between the T1 and T2 features, forcing the model to focus precisely on the areas of change.
+
+2. **Feature Engineering: Enriching the Data**
+
+Instead of providing only the 4 raw bands to the model, 5 new features were created, resulting in an input tensor with 9 channels.
+
+* **Spectral Indices**
+
+These indices are mathematical combinations of the bands that highlight specific phenomena.
+
+   * **NBR (Normalized Burn Ratio)**: This is the standard index for fire detection. It exploits the strong infrared response of vegetation.
+
+      * Calculation: `NBR = (NIR - SWIR2) / (NIR + SWIR2)`
+      * Intuition: Healthy vegetation reflects a lot of NIR and little SWIR2 (resulting in high NBR). After a fire, this ratio reverses (low NBR).
+    
+   * **NBRSWIR**: A variation that uses both shortwave infrared bands, useful for differentiating water from burn scars.
+
+      * Calculation: NBRSWIR = `(SWIR2 - SWIR1 - 0.02) / (SWIR2 + SWIR1 + 0.1)`
+
+* **Texture Features (GLCM)**
+
+A fire not only changes the color (spectral reflectance), but also the texture of the landscape, usually from complex to homogeneous. This is captured with the Gray-Level Co-occurrence Matrix (GLCM), calculated over the NIR band.
+
+   * **Contrast**: Measures local variation in intensity. Increases in areas with complex textures.
+
+   * **Homogeneity**: Measures uniformity. Increases in areas with smooth, homogeneous textures, such as a burn scar.
+
+   * **Correlation**: Measures the linear dependence between neighboring pixels.
 
 ```
 /
