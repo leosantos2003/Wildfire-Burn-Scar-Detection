@@ -17,12 +17,8 @@ The mission, as proposed by the event, is to develop a computational solution to
 * **Phase 4**: After the first training session, a speed bottleneck was identified. Calculating features "live" every epoch was slowing the process down. The solution was to create a preprocessing pipeline where all heavy calculations are performed once and saved to disk. This resulted in a drastic acceleration in training time, from several minutes to seconds per epoch.
 
 ## Key-concepts and calculation explained
-
-<div align="center">
    
-   ### 1. **Model Architecture: Siamese Attention U-Net**
-
-</div>
+### 1. **Model Architecture: Siamese Attention U-Net**
 
 The choice of architecture was deliberate to solve the bi-temporal change detection problem.
 
@@ -61,6 +57,14 @@ A fire not only changes the color (spectral reflectance), but also the texture o
    * **Homogeneity**: Measures uniformity. Increases in areas with smooth, homogeneous textures, such as a burn scar.
 
    * **Correlation**: Measures the linear dependence between neighboring pixels.
+
+### 3. **Composite Loss Function**
+
+To address class imbalance (many more "unburned" pixels than "burned" pixels), we use a loss that combines two functions:
+
+* **Dice Loss**: Directly optimizes the overlap between the predicted and real mask, being very effective for imbalanced classes.
+
+* **Focal Loss**: A modification of Cross-Entropy that focuses training on the most "difficult" examples (usually the pixels at the edges of the burn), giving less importance to the easy examples (large "unburned" areas).
 
 ```
 /
