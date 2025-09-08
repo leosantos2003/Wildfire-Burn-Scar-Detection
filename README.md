@@ -116,7 +116,7 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
     python src/preprocess_features.py
     ```
 
-2.  **Train Model:** To begin training from scratch:
+2.  **Train Model:** To begin training from scratch (this step may take even longer):
     ```bash
     python src/train.py
     ```
@@ -125,7 +125,7 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
     ```bash
     python src/evaluate.py
     ```
-4. **Generata Image Results:** Build and run the three cells in the Jupyter Notebook file, pressing the "Reset" and "Play" buttons.
+4. **Generata Image Results:** Build and run the three cells in the Jupyter Notebook `1_eda_and_baseline.ipynb` file, pressing the "Restart" and "Run All" buttons.
 
 ## License
 
