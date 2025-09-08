@@ -18,7 +18,7 @@ The mission, as proposed by the event, is to develop a computational solution to
 
 ## Key-concepts and calculation explained
 
-1. **Model Architecture: Siamese Attention U-Net**
+### 1. **Model Architecture: Siamese Attention U-Net**
 
 The choice of architecture was deliberate to solve the bi-temporal change detection problem.
 
@@ -31,7 +31,7 @@ The choice of architecture was deliberate to solve the bi-temporal change detect
     * **Channel Attention**: Decide which channels (e.g., is the NIR band more important than the Red band?) are more relevant.
     * **Spatial Attention**: Decide which areas of the image (e.g., the central region with texture changes) are most important. In this model, attention is applied to the absolute difference between the T1 and T2 features, forcing the model to focus precisely on the areas of change.
 
-2. **Feature Engineering: Enriching the Data**
+### 2. **Feature Engineering: Enriching the Data**
 
 Instead of providing only the 4 raw bands to the model, 5 new features were created, resulting in an input tensor with 9 channels.
 
