@@ -66,25 +66,6 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
 
 * **Focal Loss**: A modification of Cross-Entropy that focuses training on the most "difficult" examples (usually the pixels at the edges of the burn), giving less importance to the easy examples (large "unburned" areas).
 
-```
-/
-|-- data/
-|   |-- dataset/
-|   |-- processed/
-|   `-- avaliacao/
-|-- src/
-|   |-- data_loader.py
-|   |-- models.py
-|   |-- loss.py
-|   |-- train.py
-|   |-- evaluate.py
-|   `-- preprocess_features.py
-|   
-|-- notebooks/
-|-- .gitignore
-`-- requirements.txt
-```
-
 ## How to install
 
 1. **Clone the repository:**
@@ -106,6 +87,25 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
     ```
 
 ## How to use
+
+```
+/
+|-- data/
+|   |-- dataset/
+|   |-- processed/
+|   `-- avaliacao/
+|-- src/
+|   |-- data_loader.py
+|   |-- models.py
+|   |-- loss.py
+|   |-- train.py
+|   |-- evaluate.py
+|   `-- preprocess_features.py
+|   
+|-- notebooks/
+|-- .gitignore
+`-- requirements.txt
+```
 
 1.  **Preprocess the Features:** This step calculates spectral and texture features to speed up training (this step may take a few minutes).
     ```bash
