@@ -13,7 +13,7 @@ from models import AttentionUNetSiamese
 
 # --- Configurações ---
 # Garanta que está usando a mesma pasta de dados (processada ou não) que usou para treinar
-DATA_ROOT = 'data/dataset/' # Mude para 'data/dataset/' se não pré-processou
+DATA_ROOT = 'data/processed/dataset' # Mude para 'data/dataset/' se não pré-processou
 T1_DIR = os.path.join(DATA_ROOT, 't1')
 T2_DIR = os.path.join(DATA_ROOT, 't2')
 MASK_DIR = os.path.join(DATA_ROOT, 'mask')

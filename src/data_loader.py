@@ -29,10 +29,10 @@ class SiameseDataset(Dataset):
         t2_path = os.path.join(self.t2_dir, fname)
         mask_path = os.path.join(self.mask_dir, fname)
 
-        # Carrega os tensores pré-processados diretamente do disco
-        t1 = torch.from_numpy(np.load(t1_path))
-        t2 = torch.from_numpy(np.load(t2_path))
-        mask = torch.from_numpy(np.load(mask_path)).unsqueeze(0)
+        # Carrega os tensores e GARANTE que eles sejam do tipo float32
+        t1 = torch.from_numpy(np.load(t1_path)).float() # <-- ADICIONE .float() AQUI
+        t2 = torch.from_numpy(np.load(t2_path)).float() # <-- ADICIONE .float() AQUI
+        mask = torch.from_numpy(np.load(mask_path)).float().unsqueeze(0) # <-- ADICIONE .float() AQUI
         
         if self.augmentation:
             if torch.rand(1) < 0.5:
