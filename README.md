@@ -2,7 +2,7 @@
 
 ## About
 
-This repository contains the solution developed for the WorCap 2025 Hackathon, focused on detecting fire scars in Brazilian biomes using bi-temporal satellite images and Deep Learning techniques.
+This repository contains the solution developed for the [WorCap 2025 Hackathon](https://www.gov.br/inpe/pt-br/eventos/worcap-2025/hackathon), focused on detecting fire scars in Brazilian biomes using bi-temporal satellite images and Deep Learning techniques.
 
 The mission, as proposed by the event, is to develop a computational solution to map affected areas, contributing to prevention, mitigation, and environmental recovery efforts. Starting from a simple baseline, this project evolved into a robust and optimized pipeline, incorporating feature engineering, an advanced neural network architecture, and a workflow focused on performance and reproducibility.
 
@@ -125,6 +125,7 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
     ```bash
     python src/evaluate.py
     ```
+4. **Generata Image Results:** Build and run the three cells in the Jupyter Notebook file, pressing the "Reset" and "Play" buttons.
 
 ## License
 
