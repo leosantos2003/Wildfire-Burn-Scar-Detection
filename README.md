@@ -125,3 +125,11 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
     ```bash
     python src/evaluate.py
     ```
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+## Contact
+
+Leonardo Santos - <leorsantos2003@gmail.com>
