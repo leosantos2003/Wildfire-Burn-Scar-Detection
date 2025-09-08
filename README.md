@@ -66,6 +66,10 @@ To address class imbalance (many more "unburned" pixels than "burned" pixels), w
 
 * **Focal Loss**: A modification of Cross-Entropy that focuses training on the most "difficult" examples (usually the pixels at the edges of the burn), giving less importance to the easy examples (large "unburned" areas).
 
+## Output Result Example
+
+<img width="1521" height="404" alt="Captura de tela 2025-09-08 005111" src="https://github.com/user-attachments/assets/eab30d3b-6954-41b0-8c8d-21cfb873bbd6" />
+
 ## How to install
 
 1. **Clone the repository:**
